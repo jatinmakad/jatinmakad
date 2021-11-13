@@ -1,34 +1,33 @@
 import React from "react";
 import styled from "styled-components";
-import { links } from '../utils/constants';
-import { Link, useLocation } from 'react-router-dom';
-import Burger from './Burger';
-import Cart from './Cart';
+import { links } from "../utils/constants";
+import { Link, useLocation } from "react-router-dom";
+import Burger from "./Burger";
+import Cart from "./Cart";
 import { toAbsolute } from "../utils/heleprs";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleModal } from "../slice/addCartSlice";
-
-
 const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
-   const data = useSelector((state) => state.cart.carts);
+  const data = useSelector((state) => state.cart.carts);
+  const isModal = useSelector((state) => state.cart.isModalOpen);
   return (
     <Wrapper
-      className={`${location.pathname === '/' ? 'light-bgc' : 'black-bgc'}`}
+      className={`${location.pathname === "/" ? "light-bgc" : "black-bgc"}`}
     >
-      <div className='container header__container'>
+      <div className="container header__container">
         <Burger />
-        <Link to='/' className='logo'>
-          <img src={toAbsolute("/shared/desktop/logo.svg")} alt='logo' />
+        <Link to="/" className="logo">
+          <img src={toAbsolute("/shared/desktop/logo.svg")} alt="logo" />
         </Link>
         <Nav>
-          <ul className='nav__list'>
+          <ul className="nav__list">
             {links.map((link) => {
               const { id, text, url } = link;
               return (
                 <li key={id}>
-                  <Link className='nav-link' to={url}>
+                  <Link className="nav-link" to={url}>
                     {text}
                   </Link>
                 </li>
@@ -36,16 +35,16 @@ const Header = () => {
             })}
           </ul>
         </Nav>
-        <div className='cart-icon-container'>
+        <div className="cart-icon-container">
           <img
-            className='cart-image'
+            className="cart-image"
             src={toAbsolute("/shared/desktop/icon-cart.svg")}
-            alt='cart'
+            alt="cart"
             onClick={() => dispatch(toggleModal())}
           />
-          <span className='cart-count'>{data.length}</span>
+          <span className="cart-count">{data.length}</span>
         </div>
-        <Cart />
+          <Cart />
       </div>
     </Wrapper>
   );

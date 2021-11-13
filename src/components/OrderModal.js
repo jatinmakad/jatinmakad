@@ -1,60 +1,60 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { formatPrice, toAbsolute } from '../utils/heleprs';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { clearCart, toggleCheckOutModal } from '../slice/addCartSlice';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { formatPrice, toAbsolute } from "../utils/heleprs";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart, toggleCheckOutModal } from "../slice/addCartSlice";
 const OrderModal = () => {
   const isModal = useSelector((state) => state.cart.isCheckoutModalOpen);
-  const dispatch = useDispatch()
-  const data = useSelector((state) => state.cart.carts)
-  const grand_total = useSelector((state) => state.cart.cartTotal)
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.cart.carts);
+  const grand_total = useSelector((state) => state.cart.cartTotal);
   return (
-    <Wrapper className={`${isModal ? 'show' : 'hide'}`}>
-      <div className='check-mark'></div>
-      <h5 className='title'>
-        thank you <br /> for your order
-      </h5>
-      <p className='message'>You will receive an email confirmation shortly.</p>
-      <div>
-        <OrderSummary>
-          <Container>
-            <OrderItem>
-              {data.map((s) => (
-                <>
-                  <img src={toAbsolute(s.cartImage)} alt='order image' />
-                  <div className='info'>
-                    <p className='info-title'>{s.name}</p>
-                    <span className='amount'>x{s.quantity}</span>
-                    <p className='price'>{formatPrice(s.price)}</p>
-                  </div>
-                </>
-              ))}
-
-            </OrderItem>
-            <hr />
-            <div className='others-amount'>
-              and{data.length - 1} other item(s)
-            </div>
-          </Container>
-          <GrandInfo>
-            <p className='grand-title'>Grand total</p>
-            <p className='grand-price'>{formatPrice(grand_total)}</p>
-          </GrandInfo>
-        </OrderSummary>
-        <Link
-          to='/'
-          className='btn-1 back-home'
-          onClick={() => {
-            dispatch(toggleCheckOutModal())
-            dispatch(clearCart())
-          }}
-        >
-          back home
-        </Link>
-      </div>
-    </Wrapper>
+      <Wrapper className={`${isModal ? "show" : "hide"}`}>
+        <div className="check-mark"></div>
+        <h5 className="title">
+          thank you <br /> for your order
+        </h5>
+        <p className="message">
+          You will receive an email confirmation shortly.
+        </p>
+        <div>
+          <OrderSummary>
+            <Container>
+              <OrderItem>
+                {data.map((s) => (
+                  <>
+                    <img src={toAbsolute(s.cartImage)} alt="order image" />
+                    <div className="info">
+                      <p className="info-title">{s.name}</p>
+                      <span className="amount">x{s.quantity}</span>
+                      <p className="price">{formatPrice(s.price)}</p>
+                    </div>
+                  </>
+                ))}
+              </OrderItem>
+              <hr />
+              <div className="others-amount">
+                and{data.length - 1} other item(s)
+              </div>
+            </Container>
+            <GrandInfo>
+              <p className="grand-title">Grand total</p>
+              <p className="grand-price">{formatPrice(grand_total)}</p>
+            </GrandInfo>
+          </OrderSummary>
+          <Link
+            to="/"
+            className="btn-1 back-home"
+            onClick={() => {
+              dispatch(toggleCheckOutModal());
+              dispatch(clearCart());
+            }}
+          >
+            back home
+          </Link>
+        </div>
+      </Wrapper>
   );
 };
 

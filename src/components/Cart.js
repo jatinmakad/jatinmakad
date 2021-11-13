@@ -1,57 +1,63 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { formatPrice, toAbsolute } from '../utils/heleprs';
-import { Link } from 'react-router-dom';
-import CartAmountBtn from './CartAmountBtn';
-import { useDispatch, useSelector } from 'react-redux';
-import {  clearCart, toggleModal } from '../slice/addCartSlice';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { formatPrice, toAbsolute } from "../utils/heleprs";
+import { Link } from "react-router-dom";
+import CartAmountBtn from "./CartAmountBtn";
+import { useDispatch, useSelector } from "react-redux";
+import { clearCart, toggleModal } from "../slice/addCartSlice";
+import OutsideClickHandler from "react-outside-click-handler";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const isCartModalOpen = useSelector((state) => state.cart.isModalOpen);
-   const data = useSelector((state) => state.cart.carts);
-   const cart_Total = useSelector((state) => state.cart.cartTotal)
+  const data = useSelector((state) => state.cart.carts);
+  const cart_Total = useSelector((state) => state.cart.cartTotal);
   return (
-    <Wrapper className={`${isCartModalOpen ? 'show' : 'hide'}`}>
-      <div className='cart-header'>
-        <h6>cart ({data.length})</h6>
-        <button className='clear-cart' onClick={() => dispatch(clearCart())}>
-          Remove all
-        </button>
-      </div>
-      {data.length !== 0 && (
-        <CartList>
-          {data.map((cartItem) => {
-            const { id, slug, cartImage, price,quantity } = cartItem;
-            return (
-              <ListItem key={id}>
-                <img src={toAbsolute(cartImage)} alt='cart item' />
-                <div className='item-info'>
-                  <h6 className='slug'>{slug}</h6>
-                  <span className='price'>{formatPrice(price)}</span>
-                </div>
-                <CartAmountBtn value={quantity} id={id} />
-              </ListItem>
-            );
-          })}
-        </CartList>
-      )}
-      {!data.length && <p className='empty-cart-message'>Your cart is empty</p>}
-      <div className='total-price'>
-        <span className='heading'>total</span>
-        <span className='cart-price'>{formatPrice(cart_Total)}</span>
-      </div>
-      <Link
-        to={`${data.length ? '/checkout' : '/'}`}
-        className='btn-1 cart-btn'
-        onClick={() => dispatch(toggleModal())}
-      >
-        {data.length > 0 ? 'Checkout' : 'Fill it'}
-      </Link>
-    </Wrapper>
+    <OutsideClickHandler
+      onOutsideClick={isCartModalOpen ? () => dispatch(toggleModal()) : ""}
+    >
+      <Wrapper className={`${isCartModalOpen ? "show" : "hide"}`}>
+        <div className="cart-header">
+          <h6>cart ({data.length})</h6>
+          <button className="clear-cart" onClick={() => dispatch(clearCart())}>
+            Remove all
+          </button>
+        </div>
+        {data.length !== 0 && (
+          <CartList>
+            {data.map((cartItem) => {
+              const { id, slug, cartImage, price, quantity } = cartItem;
+              return (
+                <ListItem key={id}>
+                  <img src={toAbsolute(cartImage)} alt="cart item" />
+                  <div className="item-info">
+                    <h6 className="slug">{slug}</h6>
+                    <span className="price">{formatPrice(price)}</span>
+                  </div>
+                  <CartAmountBtn value={quantity} id={id} />
+                </ListItem>
+              );
+            })}
+          </CartList>
+        )}
+        {!data.length && (
+          <p className="empty-cart-message">Your cart is empty</p>
+        )}
+        <div className="total-price">
+          <span className="heading">total</span>
+          <span className="cart-price">{formatPrice(cart_Total)}</span>
+        </div>
+        <Link
+          to={`${data.length ? "/checkout" : "/"}`}
+          className="btn-1 cart-btn"
+          onClick={() => dispatch(toggleModal())}
+        >
+          {data.length > 0 ? "Checkout" : "Fill it"}
+        </Link>
+      </Wrapper>
+    </OutsideClickHandler>
   );
 };
-
 
 const Wrapper = styled.div`
   border-radius: var(--radius);
@@ -139,7 +145,6 @@ const ListItem = styled.li`
 `;
 
 export default Cart;
-
 
 // addCart(state, action) {
 //   const { id, quantity, price } = action.payload;
